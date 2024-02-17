@@ -5,3 +5,9 @@ export const userLogin = async (userCredentials) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userCredentials),
   });
+export const userSignup = async (userCredentials) =>
+  await fetch(`${ENDPOINT}/signUp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userCredentials),
+  });
