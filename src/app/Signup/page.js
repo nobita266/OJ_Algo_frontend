@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { fieldValidation } from "../helpers/validator";
 import { userSignup } from "../api/auth";
+import { redirect } from "next/navigation";
 
 const defaultUserData = {
   firstName: "",
@@ -55,10 +56,13 @@ function page() {
     await userSignup({ firstName, lastName, email, password }).then(
       async (res) => {
         if (res.ok) {
+          // revalidateTag("username");
+
           console.log(
             "congratulation your account has been created successfully"
           );
           setUserData(defaultUserData);
+          redirect(`../Homepage`);
         } else if (!res.ok) {
           const { msg } = await res.json();
         }

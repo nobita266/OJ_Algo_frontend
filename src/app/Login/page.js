@@ -6,6 +6,8 @@ import logo from "../../../public/netflix.jpg";
 import { useState } from "react";
 import { fieldValidation } from "../helpers/validator";
 import { userLogin } from "../api/auth";
+// import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 const defaultUserCredentials = {
   email: "",
   password: "",
@@ -15,6 +17,7 @@ function page() {
   const [userCredentials, setUserCredentials] = useState(
     defaultUserCredentials
   );
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState(defaultError);
@@ -39,11 +42,15 @@ function page() {
         if (res.ok) {
           const { userData, accessToken, msg } = await res.json();
           console.log(userData);
+          console.log(router);
+          router.push(`/Homepage`);
           return;
         }
         if (!res.ok) {
           const { msg } = await res.json();
           console.log(msg);
+
+          // redirect(`/Homepage`);
         }
       })
       .catch((error) => {
