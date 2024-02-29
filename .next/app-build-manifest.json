@@ -6,20 +6,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/Signup/page": [
+    "/Compiler/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Signup/page.js"
+      "static/chunks/app/Compiler/page.js"
     ],
     "/Homepage/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Homepage/page.js"
-    ],
-    "/Login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Login/page.js"
     ]
   }
 }

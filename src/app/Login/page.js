@@ -43,7 +43,7 @@ function page() {
           const { userData, accessToken, msg } = await res.json();
           console.log(userData);
           console.log(router);
-          router.push(`/Homepage`);
+          router.replace(`/Compiler`);
           return;
         }
         if (!res.ok) {

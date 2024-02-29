@@ -1,6 +1,4 @@
 {
-  "/Signup/page": "app/Signup/page.js",
-  "/Homepage/page": "app/Homepage/page.js",
-  "/Login/page": "app/Login/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/Compiler/page": "app/Compiler/page.js",
+  "/Homepage/page": "app/Homepage/page.js"
 }
