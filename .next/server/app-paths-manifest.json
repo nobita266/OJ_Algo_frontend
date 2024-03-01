@@ -1,4 +1,6 @@
 {
-  "/Compiler/page": "app/Compiler/page.js",
-  "/Homepage/page": "app/Homepage/page.js"
+  "/pages/Homepage/page": "app/pages/Homepage/page.js",
+  "/pages/Homepage/[user]/page": "app/pages/Homepage/[user]/page.js",
+  "/pages/Signup/page": "app/pages/Signup/page.js",
+  "/pages/[Compiler]/page": "app/pages/[Compiler]/page.js"
 }
