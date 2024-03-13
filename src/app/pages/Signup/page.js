@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import { fieldValidation } from "../../helpers/validator";
 import { userSignup } from "../api/auth";
-import { redirect } from "next/navigation";
+
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const defaultUserData = {
   firstName: "",
@@ -23,22 +25,27 @@ function page() {
   const [userData, setUserData] = useState(defaultUserData);
   const [errors, setErrors] = useState(defaultError);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
   const togglePasswordVisibility = () => {
     setShowPassword((prevPassword) => !prevPassword);
   };
   const handleFirstName = (e) => {
+    e.preventDefault();
     setUserData((prev) => ({ ...prev, firstName: e.target.value }));
   };
   const handleLastName = (e) => {
+    e.preventDefault();
     setUserData((prev) => ({ ...prev, lastName: e.target.value }));
   };
   const handleEmail = (e) => {
+    e.preventDefault();
     setUserData((prev) => ({ ...prev, email: e.target.value }));
   };
   const handlePassword = (e) => {
     setUserData((prev) => ({ ...prev, password: e.target.value }));
   };
   const handleConfirmPassword = (e) => {
+    e.preventDefault();
     setUserData((prev) => ({
       ...prev,
       confirmPassword: e.target.value,
@@ -46,10 +53,12 @@ function page() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { firstName, lastName, email, password } = userData;
     const { isDataValid, msg, field } = fieldValidation(userData);
     if (!isDataValid) {
       setErrors({ [field]: msg });
+      console.log(msg);
       return;
     }
     setIsLoading(true);
@@ -62,9 +71,11 @@ function page() {
             "congratulation your account has been created successfully"
           );
           setUserData(defaultUserData);
-          redirect(`../Homepage`);
+          router.replace("/pages/Homepage");
+          // redirect(`./Homepage`);
         } else if (!res.ok) {
           const { msg } = await res.json();
+          console.log(msg);
         }
       }
     );
@@ -133,6 +144,15 @@ function page() {
         <button className="bg-blue-600 text-white rounded-md h-8">
           sign up
         </button>
+        <p>
+          Already have an account?
+          <span>
+            {/* <a href="">Signup</a> */}
+            <Link className="text-blue-600 font-semibold" href={"/pages/Login"}>
+              SignIn
+            </Link>
+          </span>
+        </p>
       </form>
     </div>
   );

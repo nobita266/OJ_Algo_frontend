@@ -21,6 +21,10 @@ function page({ params }) {
     const fetchProblemDetails = async () => {
       try {
         const res = await problem(problemNumber);
+        if (!res.ok) {
+          console.log("yaman");
+          router.replace("/Homepage");
+        }
         const qusDetails = await res.json();
 
         setName(qusDetails.name);

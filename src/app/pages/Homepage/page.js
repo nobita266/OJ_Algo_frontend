@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { problemList } from "../api/problemList";
 import Link from "next/link";
-
+import Navbar from "@/app/component/navbar/navbar";
+import Footer from "@/app/component/footer/footer";
 function page() {
-  const [name, setName] = useState("");
   const [allProblem, setAllProblem] = useState([]);
 
   useEffect(() => {
@@ -23,16 +23,25 @@ function page() {
   }, []);
   return (
     <div>
-      <h1>List of problems</h1>
-      <ul>
-        {allProblem.map((problem) => (
-          <li key={problem.problemNumber}>
-            <Link href={`/pages/${problem.problemNumber}`}>
-              {problem.problemNumber}: {problem.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <Navbar />
+      <div className="bg-gray-600 w-screen ">
+        <h1 className="bg-gray-950  text-white flex justify-center items-center text-xl p-2 mt-1">
+          List of problems
+        </h1>
+        <ul className="">
+          {allProblem.map((problem) => (
+            <li
+              className="bg-gray-700 border-b-2 p-4 text-white text-xl hover:text-blue-500"
+              key={problem.problemNumber}
+            >
+              <Link href={`/pages/${problem.problemNumber}`}>
+                {problem.problemNumber}: {problem.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Footer />
     </div>
   );
 }

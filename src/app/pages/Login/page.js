@@ -41,9 +41,11 @@ function page() {
       .then(async (res) => {
         if (res.ok) {
           const { userData, accessToken, msg } = await res.json();
+
           console.log(userData);
-          console.log(router);
-          router.replace(`/Compiler`);
+          localStorage.setItem("accessToken", userData.accessToken);
+
+          router.replace(`/pages/Homepage`);
           return;
         }
         if (!res.ok) {
@@ -84,6 +86,14 @@ function page() {
 
               <button type="submit" className="bg-red-600 w-full">
                 Login
+              </button>
+              <button
+                onClick={() => {
+                  router.push("/pages/Signup");
+                }}
+                className="bg-blue-500 w-full"
+              >
+                Signup
               </button>
             </form>
           </div>
