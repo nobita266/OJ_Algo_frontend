@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:8000/api/auth";
+const ENDPOINT = "https://oj-algo.onrender.com/api/auth";
 export const userLogin = async (userCredentials) =>
   await fetch(`${ENDPOINT}/logIn`, {
     method: "POST",
