@@ -81,11 +81,19 @@ function page() {
     );
   };
   return (
-    <div className="bg-slate-400  w-screen h-screen flex justify-center items-center">
+    <div
+      className="bg-slate-400  w-screen h-screen flex justify-center items-center"
+      style={{
+        backgroundImage: "url('/netflix.jpg')",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <form
-        className="w-1/2 h-1/2 bg-red-400 flex flex-col p-2 "
+        className="w-1/2 h-1/2 bg-[rgba(0,0,0,0.7)] flex flex-col p-2 rounded-3xl"
         onSubmit={handleSubmit}
       >
+        <h1 className="text-white text-2xl font-bold">Sign Up</h1>
         <input
           type="text"
           className="input-field mb-2 h-8 "
@@ -139,12 +147,14 @@ function page() {
           {showPassword ? "Hide" : "show"}
         </span> */}
         {errors.confirmPassword && (
-          <span className="input-error">{errors.confirmPassword}</span>
+          <span className="input-error text-white">
+            {errors.confirmPassword}
+          </span>
         )}
         <button className="bg-blue-600 text-white rounded-md h-8">
           sign up
         </button>
-        <p>
+        <p className="text-white">
           Already have an account?
           <span>
             {/* <a href="">Signup</a> */}

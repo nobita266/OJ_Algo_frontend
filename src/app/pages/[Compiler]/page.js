@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { printOutput } from "../api/code";
 import { problem } from "../api/problems";
 
@@ -8,9 +7,12 @@ import { useRouter } from "next/navigation";
 
 function page({ params }) {
   const router = useRouter();
-  console.log(parseInt(params.Compiler));
-  const [code, setCode] = useState("");
+
+  const [code, setCode] = useState(
+    "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\nreturn 0;\n}\n"
+  );
   const [output, setOutput] = useState("");
+  const [input, setInput] = useState("");
   const [language, setLanguage] = useState("cpp");
   const [problemNumber, setproblemNumber] = useState(parseInt(params.Compiler));
   const [name, setName] = useState("");
@@ -22,8 +24,7 @@ function page({ params }) {
       try {
         const res = await problem(problemNumber);
         if (!res.ok) {
-          console.log("yaman");
-          router.replace("/Homepage");
+          router.replace("/pages/Homepage");
         }
         const qusDetails = await res.json();
 
@@ -42,15 +43,29 @@ function page({ params }) {
 
   const handleSubmit = async () => {
     // e.preventDefault();
+    console.log(input);
     const payload = {
       language,
       code,
+      input,
     };
+    console.log(payload);
     try {
-      const { data } = await printOutput(payload);
-      setOutput(data.output + "hello world!");
+      const res = await printOutput(payload);
+      const z = await res.json();
 
-      console.log(data);
+      console.log("Response:", z); // Check the structure of the response object
+
+      // Access the output depending on the structure of the response object
+      const output = z.output;
+      console.log(output);
+
+      if (output !== undefined) {
+        // Update the output state
+        setOutput(output);
+      } else {
+        console.log("Output not found in response:", res);
+      }
     } catch (err) {
       console.log(err.response);
     }
@@ -58,7 +73,7 @@ function page({ params }) {
 
   return (
     <div className="h-screen w-screen flex">
-      <div className="left w-1/2 h-screen bg-red-300 flex flex-col gap-4">
+      <div className="left w-1/2 h-screen text-gray-950 flex flex-col gap-4">
         <h1 className="text-2xl font-bold">
           <span>{problemNumber}</span> {name}
         </h1>
@@ -109,7 +124,7 @@ function page({ params }) {
         <textarea
           rows="20"
           cols="75"
-          className="h-3/4 w-full bg-slate-300 "
+          className="h-3/4 w-full bg-gray-900 text-green-500 text-xl"
           value={code}
           onChange={(e) => {
             e.preventDefault();
@@ -122,7 +137,7 @@ function page({ params }) {
           className="submit_code bg-green-700 rounded-sm text-white w-1/2 "
           onClick={handleSubmit}
         >
-          submit
+          run
         </button>
 
         <button
@@ -131,7 +146,22 @@ function page({ params }) {
         >
           submit
         </button>
-        <h1>{output}</h1>
+        <p>TestInput</p>
+        <textarea
+          rows="5"
+          cols="15"
+          value={input}
+          placeholder="Input"
+          onChange={(e) => setInput(e.target.value)}
+          className="w-full border border-solid border-black"
+        ></textarea>
+        <p>output</p>
+        {output && (
+          <textarea className="w-full border border-solid border-black">
+            {output}
+          </textarea>
+        )}
+        {/* <h1>{output}</h1> */}
       </div>
     </div>
   );

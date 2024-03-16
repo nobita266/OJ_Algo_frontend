@@ -62,7 +62,14 @@ function page() {
 
   return (
     <>
-      <div className="main-container  h-screen w-screen flex  justify-center items-center ">
+      <div
+        className="main-container  h-screen w-screen flex  justify-center items-center "
+        style={{
+          backgroundImage: "url('/netflix.jpg')",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="bg-[rgba(0,0,0,0.7)] w-1/2 h-1/2  ">
           <div className="login_container flex flex-col justify-center items-center gap-3">
             <h1 className="text-white font-[700] text-[3rem]">Sign In</h1>
