@@ -1,4 +1,4 @@
-const ENDPOINT = "https://oj-algo.onrender.com";
+const ENDPOINT = "http://localhost:8000";
 export const printOutput = async (payload) =>
   await fetch(`${ENDPOINT}/run`, {
     method: "POST",

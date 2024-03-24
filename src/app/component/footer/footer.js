@@ -3,7 +3,7 @@ import React from "react";
 
 export default function footer() {
   return (
-    <footer className="bg-neutral-100 text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-left">
+    <footer className="bg-neutral-100 text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-left ">
       <div className="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
         <div className="mr-12 hidden lg:block">
           <span>Get connected with us on social networks:</span>
@@ -81,7 +81,7 @@ export default function footer() {
       <div className="mx-6 py-10 text-center md:text-left">
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* <!-- TW Elements section --> */}
-          <div className="">
+          {/* <div className="">
             <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@ export default function footer() {
               Hummingbird Web Solutions. I recently graduated from NIT
               Kurukshetra
             </p>
-          </div>
+          </div> */}
           {/* <!-- Products section --> */}
 
           {/* <!-- Useful links section --> */}

@@ -4,6 +4,7 @@ import { problemList } from "../api/problemList";
 import Link from "next/link";
 import Navbar from "@/app/component/navbar/navbar";
 import Footer from "@/app/component/footer/footer";
+
 function page() {
   const [allProblem, setAllProblem] = useState([]);
 
@@ -12,15 +13,19 @@ function page() {
       try {
         const res = await problemList();
         const z = await res.json();
+        // Set the state with the fetched Aproblem list
         setAllProblem(z);
-
-        console.log(allProblem);
       } catch (error) {
         console.error("Error fetching problem List:", error);
       }
     };
     fetchProblemList();
   }, []);
+
+  const sortedProblems = [...allProblem].sort(
+    (a, b) => a.problemNumber - b.problemNumber
+  );
+
   return (
     <div>
       <Navbar />
@@ -29,12 +34,12 @@ function page() {
           List of problems
         </h1>
         <ul className="">
-          {allProblem.map((problem) => (
+          {sortedProblems.map((problem) => (
             <li
               className="bg-gray-700 border-b-2 p-4 text-white text-xl hover:text-blue-500"
               key={problem.problemNumber}
             >
-              <Link href={`/pages/${problem.problemNumber}`}>
+              <Link href={`/pages/${problem._id}`}>
                 {problem.problemNumber}: {problem.name}
               </Link>
             </li>

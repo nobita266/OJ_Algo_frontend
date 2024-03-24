@@ -1,6 +1,6 @@
-const ENDPOINT = "https://oj-algo.onrender.com";
-export const problem = async (problemNumber) =>
-  await fetch(`${ENDPOINT}/problems/${problemNumber}`, {
+const ENDPOINT = "http://localhost:8000";
+export const problem = async (problemId) =>
+  await fetch(`${ENDPOINT}/problems/${problemId}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });

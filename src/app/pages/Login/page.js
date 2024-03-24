@@ -12,102 +12,107 @@ const defaultUserCredentials = {
   email: "",
   password: "",
 };
-const defaultError = {};
-function page() {
+
+function LoginPage() {
   const [userCredentials, setUserCredentials] = useState(
     defaultUserCredentials
   );
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState(defaultError);
-  const handleEmail = (e) => {
+  const [errors, setErrors] = useState({});
+  const router = useRouter();
+
+  const handleEmailChange = (e) => {
     setUserCredentials((prev) => ({ ...prev, email: e.target.value }));
   };
-  const handlePassword = (e) => {
-    console.log("enter");
+
+  const handlePasswordChange = (e) => {
     setUserCredentials((prev) => ({ ...prev, password: e.target.value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userCredentials);
     const { isDataValid, field, msg } = fieldValidation(userCredentials);
     if (!isDataValid) {
       setErrors({ [field]: msg });
       return;
     }
+
     setIsLoading(true);
-    await userLogin(userCredentials)
-      .then(async (res) => {
-        if (res.ok) {
-          const { userData, accessToken, msg } = await res.json();
-
-          console.log(userData);
-          localStorage.setItem("accessToken", userData.accessToken);
-
-          router.replace(`/pages/Homepage`);
-          return;
-        }
-        if (!res.ok) {
-          const { msg } = await res.json();
-          console.log(msg);
-
-          // redirect(`/Homepage`);
-        }
-      })
-      .catch((error) => {
-        console.log(error.message);
+    try {
+      const res = await userLogin(userCredentials);
+      if (res.ok) {
+        const { accessToken } = await res.json();
+        localStorage.setItem("accessToken", accessToken);
+        router.replace(`/pages/Homepage`);
+      } else {
+        const { msg } = await res.json();
+        setErrors({ login: msg });
+      }
+    } catch (error) {
+      console.error("Error occurred while logging in:", error);
+      setErrors({
+        login: "An unexpected error occurred. Please try again later.",
       });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <>
-      <div
-        className="main-container  h-screen w-screen flex  justify-center items-center "
-        style={{
-          backgroundImage: "url('/netflix.jpg')",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="bg-[rgba(0,0,0,0.7)] w-1/2 h-1/2  ">
-          <div className="login_container flex flex-col justify-center items-center gap-3">
-            <h1 className="text-white font-[700] text-[3rem]">Sign In</h1>
-            <form className="space-y-2 " onSubmit={handleSubmit}>
-              <div>
-                <input
-                  type="text"
-                  placeholder="email"
-                  value={userCredentials.email}
-                  onChange={handleEmail}
-                />
-              </div>
-              <div>
-                <input
-                  type={showPassword == true ? "text" : "password"}
-                  placeholder="Password"
-                  value={userCredentials.password}
-                  onChange={handlePassword}
-                />
-              </div>
-
-              <button type="submit" className="bg-red-600 w-full">
-                Login
-              </button>
-              <button
-                onClick={() => {
-                  router.push("/pages/Signup");
-                }}
-                className="bg-blue-500 w-full"
-              >
-                Signup
-              </button>
-            </form>
-          </div>
+    <div
+      className="main-container h-screen w-screen flex justify-center items-center"
+      style={{
+        backgroundImage: "url('/netflix.jpg')",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="bg-[rgba(0,0,0,0.7)] w-1/2 h-1/2">
+        <div className="login_container flex flex-col justify-center items-center gap-3">
+          <h1 className="text-white font-[700] text-[3rem]">Sign In</h1>
+          <form className="space-y-2" onSubmit={handleSubmit}>
+            <div>
+              <input
+                type="text"
+                placeholder="Email"
+                value={userCredentials.email}
+                onChange={handleEmailChange}
+              />
+              {errors.email && (
+                <div className="text-red-500">{errors.email}</div>
+              )}
+            </div>
+            <div>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={userCredentials.password}
+                onChange={handlePasswordChange}
+              />
+              {errors.password && (
+                <div className="text-red-500">{errors.password}</div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="bg-red-600 w-full"
+              disabled={isLoading}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => router.push("/pages/Signup")}
+              className="bg-blue-500 w-full"
+            >
+              Signup
+            </button>
+            {errors.login && <div className="text-red-500">{errors.login}</div>}
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-export default page;
+export default LoginPage;

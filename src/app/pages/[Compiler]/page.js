@@ -4,25 +4,33 @@ import { printOutput } from "../api/code";
 import { problem } from "../api/problems";
 
 import { useRouter } from "next/navigation";
+import { submitCode } from "../api/submitCode";
 
-function page({ params }) {
+function Page({ params }) {
   const router = useRouter();
 
   const [code, setCode] = useState(
     "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\nreturn 0;\n}\n"
   );
+  const [problemId, setProblemId] = useState(params.Compiler);
+  const [errorMessage, setErrorMessage] = useState("");
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
   const [language, setLanguage] = useState("cpp");
-  const [problemNumber, setproblemNumber] = useState(parseInt(params.Compiler));
+  const [problemNumber, setProblemNumber] = useState(0);
   const [name, setName] = useState("");
   const [statement, setStatement] = useState("");
   const [examples, setExamples] = useState([]);
   const [constraints, setConstraints] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resultMessage, setResultMessage] = useState("");
+
   useEffect(() => {
     const fetchProblemDetails = async () => {
       try {
-        const res = await problem(problemNumber);
+        const res = await problem(problemId);
+
         if (!res.ok) {
           router.replace("/pages/Homepage");
         }
@@ -32,6 +40,7 @@ function page({ params }) {
         setStatement(qusDetails.statement);
         setExamples(qusDetails.examples);
         setConstraints(qusDetails.constraints);
+        setProblemNumber(qusDetails.problemNumber);
         console.log(qusDetails);
       } catch (error) {
         console.error("Error fetching problem details:", error);
@@ -39,10 +48,32 @@ function page({ params }) {
     };
 
     fetchProblemDetails();
-  }, [problemNumber]);
+  }, [problemId, router, input, output]);
+
+  const handleCodeSubmit = async () => {
+    setIsSubmitting(true);
+    const payload = { code, language, problemId };
+    console.log(payload);
+    console.log(localStorage.getItem("accessToken"));
+    try {
+      const res = await submitCode(payload);
+      const result = await res.json();
+      if (result.status === 200) {
+        setResultMessage("All test cases submitted successfully!");
+      } else {
+        setResultMessage(
+          `${result.msg} input: ${result.yourOutput.input}\n yourOutput: ${result.yourOutput.actualOutput}\n expectedOutput: ${result.yourOutput.expectedOutput} `
+        );
+      }
+    } catch (error) {
+      setResultMessage("error in submitting code" + error.message);
+      console.log("error in submitting code", error.message);
+    }
+    setIsSubmitting(false);
+  };
 
   const handleSubmit = async () => {
-    // e.preventDefault();
+    setIsRunning(true);
     console.log(input);
     const payload = {
       language,
@@ -54,53 +85,56 @@ function page({ params }) {
       const res = await printOutput(payload);
       const z = await res.json();
 
-      console.log("Response:", z); // Check the structure of the response object
+      console.log("Response:", z);
+      console.log(z.err);
 
-      // Access the output depending on the structure of the response object
       const output = z.output;
       console.log(output);
 
       if (output !== undefined) {
-        // Update the output state
+        setErrorMessage("");
         setOutput(output);
       } else {
-        console.log("Output not found in response:", res);
+        setErrorMessage(z.err.stderr.split("error")[1]);
+        console.log("Output not found in response:hello", z.err.stderr);
       }
-    } catch (err) {
-      console.log(err.response);
+    } catch (error) {
+      console.error("Error:", error.message);
+      setErrorMessage(error.message);
     }
+    setIsRunning(false);
   };
 
   return (
     <div className="h-screen w-screen flex">
-      <div className="left w-1/2 h-screen text-gray-950 flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">
+      <div className="left w-1/2 h-screen text-gray-950 flex flex-col gap-4 bg-slate-200 space-y-2">
+        <h1 className="text-3xl font-semibold mt-2 b">
           <span>{problemNumber}</span> {name}
         </h1>
-        <p>
-          <strong>
-            problem statment: <br />
+        <p className="mb-2">
+          <strong className="text-xl">
+            Statement: <br />
           </strong>{" "}
-          {statement}
         </p>
+        <p className="text-xl"> {statement}</p>
         <div>
           {examples.map((example, index) => (
-            <div key={index}>
-              <p>
+            <div key={index} className="flex flex-col gap-4">
+              <p className="text-xl">
                 <strong>Input:</strong> {example.input}
               </p>
               <p>
-                <strong>Output:</strong> {example.output}
+                <strong className="text-xl">Output:</strong> {example.output}
               </p>
-              <p>
+              <p className="text-xl">
                 <strong>Explanation:</strong> {example.explanation}
               </p>
             </div>
           ))}
         </div>
-        <p>
+        <p className="flex flex-col ">
           {" "}
-          <strong>constraints:</strong>
+          <strong className="text-xl">Constraints:</strong>
           <br />
           {constraints}
         </p>
@@ -116,8 +150,8 @@ function page({ params }) {
               console.log(e.target.value);
             }}
           >
-            <option value="cpp">c++</option>
-            <option value="py">python</option>
+            <option value="cpp">C++</option>
+            <option value="py">Python</option>
           </select>
         </span>
 
@@ -134,19 +168,25 @@ function page({ params }) {
         <br />
 
         <button
-          className="submit_code bg-green-700 rounded-sm text-white w-1/2 "
+          className={`submit_code bg-green-700 rounded-sm text-white w-1/2 ${
+            isRunning ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={handleSubmit}
+          disabled={isRunning}
         >
-          run
+          Run
         </button>
 
         <button
-          className="submit_code bg-blue-700 rounded-sm text-white w-1/2 "
-          onClick={handleSubmit}
+          className={`submit_code bg-blue-700 rounded-sm text-white w-1/2 ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleCodeSubmit}
+          disabled={isSubmitting}
         >
-          submit
+          Submit
         </button>
-        <p>TestInput</p>
+        <p>Test Input</p>
         <textarea
           rows="5"
           cols="15"
@@ -155,16 +195,17 @@ function page({ params }) {
           onChange={(e) => setInput(e.target.value)}
           className="w-full border border-solid border-black"
         ></textarea>
-        <p>output</p>
-        {output && (
-          <textarea className="w-full border border-solid border-black">
-            {output}
-          </textarea>
-        )}
-        {/* <h1>{output}</h1> */}
+        <p>Output</p>
+        <textarea
+          value={output}
+          className="w-full border border-solid border-black"
+          readOnly
+        ></textarea>
+        {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+        {resultMessage && <div className="text-green-600">{resultMessage}</div>}
       </div>
     </div>
   );
 }
 
-export default page;
+export default Page;

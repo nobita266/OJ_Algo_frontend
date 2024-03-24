@@ -19,7 +19,7 @@ export default function Navbar() {
 
   // Function to handle logout
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
 
     setLoggedIn(false);
   };
@@ -30,6 +30,14 @@ export default function Navbar() {
     router.push("/pages/Login");
 
     // Update the state to reflect that the user is logged in
+  };
+  const handleProfilePage = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      router.push("/pages/Profile");
+    } else {
+      router.replace("/pages/Login");
+    }
   };
 
   return (
@@ -48,9 +56,9 @@ export default function Navbar() {
               Login
             </button>
           )}
-          <Link className="text-white" href={"/pages/profile"}>
+          <button className="text-white" onClick={handleProfilePage}>
             Account
-          </Link>
+          </button>
         </div>
       </div>
       <ul
@@ -59,7 +67,7 @@ export default function Navbar() {
           console.log("clicked");
         }}
       >
-        <button>Array</button>
+        {/* <button>Array</button>
         <button>String</button>
         <button>Hashmap</button>
         <button>Binary Tree</button>
@@ -67,7 +75,7 @@ export default function Navbar() {
         <button>Graph</button>
         <button>Stack</button>
         <button>Queue</button>
-        <li>LinkedList</li>
+        <li>LinkedList</li> */}
       </ul>
     </>
   );
