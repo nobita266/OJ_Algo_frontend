@@ -29,14 +29,14 @@ function page() {
   return (
     <div>
       <Navbar />
-      <div className="bg-gray-600 w-screen ">
+      <div className=" w-screen ">
         <h1 className="bg-gray-950  text-white flex justify-center items-center text-xl p-2 mt-1">
           List of problems
         </h1>
         <ul className="">
           {sortedProblems.map((problem) => (
             <li
-              className="bg-gray-700 border-b-2 p-4 text-white text-xl hover:text-blue-500"
+              className=" border-b-2 p-4 border-b-black text-xl hover:text-blue-500"
               key={problem.problemNumber}
             >
               <Link href={`/pages/${problem._id}`}>

@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { fetchUsers } from "../api/fetchUsers";
 import Navbar from "@/app/component/navbar/navbar";
 import Footer from "@/app/component/footer/footer";
+
 import { useRouter } from "next/navigation";
 
 function Page() {
@@ -42,7 +43,7 @@ function Page() {
     <>
       <Navbar />
       <div className="w-screen h-screen flex justify-center items-center">
-        <div className="bg-gray-600 w-1/2 p-4 text-white">
+        <div className="bg-gray-900 w-1/2 p-4 text-white">
           <h1 className="text-3xl font-semibold mb-4 text-white">All Users</h1>
           <ul className="space-y-2">
             <li className="flex justify-between">

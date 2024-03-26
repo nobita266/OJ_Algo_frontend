@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   // Component names should start with a capital letter
-  const [loggedIn, setLoggedIn] = useState(false); // State to track login status
+  const [loggedIn, setLoggedIn] = useState(false); //
   const router = useRouter();
 
   useEffect(() => {
@@ -39,25 +39,53 @@ export default function Navbar() {
       router.replace("/pages/Login");
     }
   };
+  const handleAdminPage = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      router.push("/pages/admin");
+    } else {
+      router.replace("/pages/Login");
+    }
+  };
 
   return (
     <>
       <div className="bg-black w-screen h-20 flex justify-between items-center">
-        <div>
-          <p className="text-purple-500 text-3xl">Flock Compiler</p>
+        <div className="m-7">
+          <Link
+            href={"/pages/Homepage"}
+            className="text-purple-500 text-4xl font-semibold"
+          >
+            Flock Compiler
+          </Link>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mr-4 font-semibold ">
           {loggedIn ? (
-            <button className="text-white" onClick={handleLogout}>
+            <button
+              className="text-white bg-red-600 w-20 h-8 rounded-md"
+              onClick={handleLogout}
+            >
               Logout
             </button>
           ) : (
-            <button className="text-white" onClick={handleLogin}>
+            <button
+              className="text-white bg-blue-600 w-20 h-8 rounded-md"
+              onClick={handleLogin}
+            >
               Login
             </button>
           )}
-          <button className="text-white" onClick={handleProfilePage}>
-            Account
+          <button
+            className="text-white bg-emerald-500 w-20 h-8 rounded-md"
+            onClick={handleProfilePage}
+          >
+            Profile
+          </button>
+          <button
+            className="text-white bg-blue-600 w-20 h-8 rounded-md"
+            onClick={handleAdminPage}
+          >
+            Admin
           </button>
         </div>
       </div>

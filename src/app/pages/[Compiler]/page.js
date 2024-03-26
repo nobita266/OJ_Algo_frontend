@@ -5,6 +5,7 @@ import { problem } from "../api/problems";
 
 import { useRouter } from "next/navigation";
 import { submitCode } from "../api/submitCode";
+import Navbar from "@/app/component/navbar/navbar";
 
 function Page({ params }) {
   const router = useRouter();
@@ -106,105 +107,110 @@ function Page({ params }) {
   };
 
   return (
-    <div className="h-screen w-screen flex">
-      <div className="left w-1/2 h-screen text-gray-950 flex flex-col gap-4 bg-slate-200 space-y-2">
-        <h1 className="text-3xl font-semibold mt-2 b">
-          <span>{problemNumber}</span> {name}
-        </h1>
-        <p className="mb-2">
-          <strong className="text-xl">
-            Statement: <br />
-          </strong>{" "}
-        </p>
-        <p className="text-xl"> {statement}</p>
-        <div>
-          {examples.map((example, index) => (
-            <div key={index} className="flex flex-col gap-4">
-              <p className="text-xl">
-                <strong>Input:</strong> {example.input}
-              </p>
-              <p>
-                <strong className="text-xl">Output:</strong> {example.output}
-              </p>
-              <p className="text-xl">
-                <strong>Explanation:</strong> {example.explanation}
-              </p>
-            </div>
-          ))}
+    <>
+      <Navbar />
+      <div className="h-screen w-screen flex">
+        <div className="left w-1/2 h-screen text-gray-950 flex flex-col gap-4 bg-slate-200 space-y-2">
+          <h1 className="text-3xl font-semibold mt-2 b">
+            <span>{problemNumber}</span> {name}
+          </h1>
+          <p className="mb-2">
+            <strong className="text-xl">
+              Statement: <br />
+            </strong>{" "}
+          </p>
+          <p className="text-xl"> {statement}</p>
+          <div>
+            {examples.map((example, index) => (
+              <div key={index} className="flex flex-col gap-4">
+                <p className="text-xl">
+                  <strong>Input:</strong> {example.input}
+                </p>
+                <p>
+                  <strong className="text-xl">Output:</strong> {example.output}
+                </p>
+                <p className="text-xl">
+                  <strong>Explanation:</strong> {example.explanation}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="flex flex-col ">
+            {" "}
+            <strong className="text-xl">Constraints:</strong>
+            <br />
+            {constraints}
+          </p>
         </div>
-        <p className="flex flex-col ">
-          {" "}
-          <strong className="text-xl">Constraints:</strong>
-          <br />
-          {constraints}
-        </p>
-      </div>
-      <div className="right w-1/2 h-screen bg-slate-100">
-        <h1 className="font-bold text-3xl">online code compiler</h1>
-        <span>
-          <label>Language: </label>
-          <select
-            value={language}
+        <div className="right w-1/2 h-screen bg-slate-100">
+          <h1 className="font-bold text-3xl">online code compiler</h1>
+          <span>
+            <label>Language: </label>
+            <select
+              value={language}
+              onChange={(e) => {
+                setLanguage(e.target.value);
+                console.log(e.target.value);
+              }}
+            >
+              <option value="cpp">C++</option>
+              <option value="py">Python</option>
+            </select>
+          </span>
+
+          <textarea
+            rows="20"
+            cols="75"
+            className="h-3/4 w-full bg-gray-900 text-green-500 text-xl"
+            value={code}
             onChange={(e) => {
-              setLanguage(e.target.value);
-              console.log(e.target.value);
+              e.preventDefault();
+              setCode(e.target.value);
             }}
+          ></textarea>
+          <br />
+
+          <button
+            className={`submit_code bg-green-700 rounded-sm text-white w-1/2 ${
+              isRunning ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={handleSubmit}
+            disabled={isRunning}
           >
-            <option value="cpp">C++</option>
-            <option value="py">Python</option>
-          </select>
-        </span>
+            Run
+          </button>
 
-        <textarea
-          rows="20"
-          cols="75"
-          className="h-3/4 w-full bg-gray-900 text-green-500 text-xl"
-          value={code}
-          onChange={(e) => {
-            e.preventDefault();
-            setCode(e.target.value);
-          }}
-        ></textarea>
-        <br />
-
-        <button
-          className={`submit_code bg-green-700 rounded-sm text-white w-1/2 ${
-            isRunning ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handleSubmit}
-          disabled={isRunning}
-        >
-          Run
-        </button>
-
-        <button
-          className={`submit_code bg-blue-700 rounded-sm text-white w-1/2 ${
-            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handleCodeSubmit}
-          disabled={isSubmitting}
-        >
-          Submit
-        </button>
-        <p>Test Input</p>
-        <textarea
-          rows="5"
-          cols="15"
-          value={input}
-          placeholder="Input"
-          onChange={(e) => setInput(e.target.value)}
-          className="w-full border border-solid border-black"
-        ></textarea>
-        <p>Output</p>
-        <textarea
-          value={output}
-          className="w-full border border-solid border-black"
-          readOnly
-        ></textarea>
-        {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-        {resultMessage && <div className="text-green-600">{resultMessage}</div>}
+          <button
+            className={`submit_code bg-blue-700 rounded-sm text-white w-1/2 ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={handleCodeSubmit}
+            disabled={isSubmitting}
+          >
+            Submit
+          </button>
+          <p>Test Input</p>
+          <textarea
+            rows="5"
+            cols="15"
+            value={input}
+            placeholder="Input"
+            onChange={(e) => setInput(e.target.value)}
+            className="w-full border border-solid border-black"
+          ></textarea>
+          <p>Output</p>
+          <textarea
+            value={output}
+            className="w-full border border-solid border-black"
+            readOnly
+          ></textarea>
+          {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+          {resultMessage && (
+            <div className="text-green-600">{resultMessage}</div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
