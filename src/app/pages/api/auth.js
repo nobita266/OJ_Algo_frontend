@@ -1,6 +1,6 @@
 const ENDPOINT = "https://oj-algo.onrender.com/api/auth";
 export const userLogin = async (userCredentials) =>
-  await fetch(`${ENDPOINT}/logIn`, {
+  await fetch(`${ENDPOINT}/LogIn`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userCredentials),
