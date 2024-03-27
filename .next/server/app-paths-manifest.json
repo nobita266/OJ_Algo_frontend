@@ -1,8 +1,6 @@
 {
-  "/pages/[Compiler]/page": "app/pages/[Compiler]/page.js",
-  "/pages/admin/page": "app/pages/admin/page.js",
+  "/pages/Homepage/page": "app/pages/Homepage/page.js",
   "/pages/Login/page": "app/pages/Login/page.js",
   "/pages/Signup/page": "app/pages/Signup/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/pages/Profile/page": "app/pages/Profile/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }

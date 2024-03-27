@@ -20,30 +20,38 @@ const defaultError = {
   password: "",
   confirmPassword: "",
 };
-function page() {
+
+function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState(defaultUserData);
   const [errors, setErrors] = useState(defaultError);
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+
   const togglePasswordVisibility = () => {
     setShowPassword((prevPassword) => !prevPassword);
   };
+
   const handleFirstName = (e) => {
     e.preventDefault();
     setUserData((prev) => ({ ...prev, firstName: e.target.value }));
   };
+
   const handleLastName = (e) => {
     e.preventDefault();
     setUserData((prev) => ({ ...prev, lastName: e.target.value }));
   };
+
   const handleEmail = (e) => {
     e.preventDefault();
     setUserData((prev) => ({ ...prev, email: e.target.value }));
   };
+
   const handlePassword = (e) => {
     setUserData((prev) => ({ ...prev, password: e.target.value }));
   };
+
   const handleConfirmPassword = (e) => {
     e.preventDefault();
     setUserData((prev) => ({
@@ -51,42 +59,42 @@ function page() {
       confirmPassword: e.target.value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { firstName, lastName, email, password } = userData;
     const { isDataValid, msg, field } = fieldValidation(userData);
+
     if (!isDataValid) {
-      setErrors({ [field]: msg });
-      console.log(msg);
+      setErrors({ ...defaultError, [field]: msg });
+      setErrorMessage(msg); // Set error message for frontend display
       return;
     }
+
     setIsLoading(true);
-    await userSignup({
-      firstName,
-      lastName,
-      email,
-      password,
-    }).then(async (res) => {
-      const result = await res.json();
+    try {
+      const res = await userSignup({ firstName, lastName, email, password });
       if (res.ok) {
-        console.log(result);
-        // revalidateTag("username");
-
+        const result = await res.json();
         localStorage.setItem("accessToken", result.accessToken);
-
-        console.log(
-          "congratulation your account has been created successfully"
+        setErrorMessage(
+          "Congratulations! Your account has been created successfully"
         );
         setUserData(defaultUserData);
         router.replace("/pages/Homepage");
-        // redirect(`./Homepage`);
-      } else if (!res.ok) {
+      } else {
         const { msg } = await res.json();
-        console.log(msg);
+        setErrorMessage(msg); // Set error message for frontend display
       }
-    });
+    } catch (error) {
+      console.error("Error:", error);
+      setErrorMessage("An error occurred. Please try again later."); // Generic error message
+    }
+
+    setIsLoading(false);
   };
+
   return (
     <div
       className="bg-slate-400  w-screen h-screen flex justify-center items-center"
@@ -101,6 +109,7 @@ function page() {
         onSubmit={handleSubmit}
       >
         <h1 className="text-white text-2xl font-bold">Sign Up</h1>
+        {/* Input fields and error messages */}
         <input
           type="text"
           className="input-field mb-2 h-8 "
@@ -139,9 +148,6 @@ function page() {
           value={userData.password}
           onChange={handlePassword}
         />
-        {/* <span className="show-hide" onClick={togglePasswordVisibility}>
-          {showPassword ? "Hide" : "show"}
-        </span> */}
         <input
           type={showPassword ? "text" : "password"}
           className="h-8 mb-2"
@@ -150,23 +156,24 @@ function page() {
           name="confirmPassword"
           onChange={handleConfirmPassword}
         />
-        {/* <span className="show-hide none" onClick={togglePasswordVisibility}>
-          {showPassword ? "Hide" : "show"}
-        </span> */}
         {errors.confirmPassword && (
           <span className="input-error text-white">
             {errors.confirmPassword}
           </span>
         )}
-        <button className="bg-blue-600 text-white rounded-md h-8">
-          sign up
+        {/* Error message display */}
+        {errorMessage && <span className="text-red-500">{errorMessage}</span>}
+        <button
+          className="bg-blue-600 text-white rounded-md h-8"
+          disabled={isLoading}
+        >
+          Sign Up
         </button>
         <p className="text-white">
           Already have an account?
           <span>
-            {/* <a href="">Signup</a> */}
             <Link className="text-blue-600 font-semibold" href={"/pages/Login"}>
-              SignIn
+              Sign In
             </Link>
           </span>
         </p>
@@ -175,4 +182,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
