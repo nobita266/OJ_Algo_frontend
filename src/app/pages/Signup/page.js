@@ -67,11 +67,13 @@ function page() {
       lastName,
       email,
       password,
-      accessToken,
     }).then(async (res) => {
+      const result = await res.json();
       if (res.ok) {
+        console.log(result);
         // revalidateTag("username");
-        localStorage.setItem("accessToken", accessToken);
+
+        localStorage.setItem("accessToken", result.accessToken);
 
         console.log(
           "congratulation your account has been created successfully"
