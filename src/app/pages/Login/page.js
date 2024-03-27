@@ -18,6 +18,7 @@ function LoginPage() {
     defaultUserCredentials
   );
   const [showPassword, setShowPassword] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const router = useRouter();

@@ -62,23 +62,28 @@ function page() {
       return;
     }
     setIsLoading(true);
-    await userSignup({ firstName, lastName, email, password }).then(
-      async (res) => {
-        if (res.ok) {
-          // revalidateTag("username");
+    await userSignup({
+      firstName,
+      lastName,
+      email,
+      password,
+      accessToken,
+    }).then(async (res) => {
+      if (res.ok) {
+        // revalidateTag("username");
+        localStorage.setItem("accessToken", accessToken);
 
-          console.log(
-            "congratulation your account has been created successfully"
-          );
-          setUserData(defaultUserData);
-          router.replace("/pages/Homepage");
-          // redirect(`./Homepage`);
-        } else if (!res.ok) {
-          const { msg } = await res.json();
-          console.log(msg);
-        }
+        console.log(
+          "congratulation your account has been created successfully"
+        );
+        setUserData(defaultUserData);
+        router.replace("/pages/Homepage");
+        // redirect(`./Homepage`);
+      } else if (!res.ok) {
+        const { msg } = await res.json();
+        console.log(msg);
       }
-    );
+    });
   };
   return (
     <div
