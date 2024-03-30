@@ -21,7 +21,7 @@ function Page() {
       try {
         const response = await fetchUsers();
         if (!response.ok) {
-          console.log("Failed to fetch user data");
+          // console.log("Failed to fetch user data");
         }
         const userData = await response.json();
 

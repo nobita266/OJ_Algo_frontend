@@ -1,25 +1,25 @@
 {
   "pages": {
+    "/pages/Homepage/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pages/Homepage/page.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/pages/Homepage/page": [
+    "/pages/[Compiler]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/pages/Homepage/page.js"
+      "static/chunks/app/pages/[Compiler]/page.js"
     ],
     "/pages/Login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/pages/Login/page.js"
-    ],
-    "/pages/Signup/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/pages/Signup/page.js"
     ]
   }
 }

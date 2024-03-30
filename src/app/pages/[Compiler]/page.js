@@ -42,7 +42,7 @@ function Page({ params }) {
         setExamples(qusDetails.examples);
         setConstraints(qusDetails.constraints);
         setProblemNumber(qusDetails.problemNumber);
-        console.log(qusDetails);
+        // console.log(qusDetails);
       } catch (error) {
         console.error("Error fetching problem details:", error);
       }
@@ -54,50 +54,58 @@ function Page({ params }) {
   const handleCodeSubmit = async () => {
     setIsSubmitting(true);
     const payload = { code, language, problemId };
-    console.log(payload);
-    console.log(localStorage.getItem("accessToken"));
+    // console.log(payload);
+    // console.log(localStorage.getItem("accessToken"));
     try {
       const res = await submitCode(payload);
+      // console.log("Response status:", res.status);
       const result = await res.json();
-      if (result.status === 200) {
+      // console.log("Response body:", result);
+
+      if (res.status === 200) {
         setResultMessage("All test cases submitted successfully!");
-      } else {
+      } else if (result.yourOutput) {
         setResultMessage(
           `${result.msg} input: ${result.yourOutput.input}\n yourOutput: ${result.yourOutput.actualOutput}\n expectedOutput: ${result.yourOutput.expectedOutput} `
         );
+      } else {
+        setResultMessage(
+          "Error in submitting code: Unexpected response format"
+        );
       }
     } catch (error) {
-      setResultMessage("error in submitting code" + error.message);
-      console.log("error in submitting code", error.message);
+      setResultMessage("Error in submitting code: " + error.message);
+      // console.log("Error in submitting code:", error.message);
     }
+
     setIsSubmitting(false);
   };
 
   const handleSubmit = async () => {
     setIsRunning(true);
-    console.log(input);
+    // console.log(input);
     const payload = {
       language,
       code,
       input,
     };
-    console.log(payload);
+    // console.log(payload);
     try {
       const res = await printOutput(payload);
       const z = await res.json();
 
-      console.log("Response:", z);
-      console.log(z.err);
+      // console.log("Response:", z);
+      // console.log(z.err);
 
       const output = z.output;
-      console.log(output);
+      // console.log(output);
 
       if (output !== undefined) {
         setErrorMessage("");
         setOutput(output);
       } else {
         setErrorMessage(z.err.stderr.split("error")[1]);
-        console.log("Output not found in response:hello", z.err.stderr);
+        // console.log("Output not found in response:hello", z.err.stderr);
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -150,7 +158,7 @@ function Page({ params }) {
               value={language}
               onChange={(e) => {
                 setLanguage(e.target.value);
-                console.log(e.target.value);
+                // console.log(e.target.value);
               }}
             >
               <option value="cpp">C++</option>

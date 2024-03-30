@@ -9,7 +9,7 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(localStorage);
+    // console.log(localStorage);
 
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -92,7 +92,7 @@ export default function Navbar() {
       <ul
         className="flex justify-evenly bg-black text-white"
         onClick={() => {
-          console.log("clicked");
+          // console.log("clicked");
         }}
       >
         {/* <button>Array</button>

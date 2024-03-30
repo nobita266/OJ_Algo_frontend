@@ -22,9 +22,9 @@ function Page() {
       const res = await problemList();
       const z = await res.json();
       setAllProblem(z);
-      console.log("problem+", allProblem.length);
+      // console.log("problem+", allProblem.length);
 
-      // console.log(allProblem);
+      // // console.log(allProblem);
     } catch (error) {
       console.error("Error fetching problem List:", error);
     }
@@ -60,9 +60,9 @@ function Page() {
     try {
       const res = await removeProblem(problemId);
       if (!res.ok) {
-        console.log("failed to deleted problem");
+        // console.log("failed to deleted problem");
       } else {
-        console.log("problem deleted successfully");
+        // console.log("problem deleted successfully");
         fetchProblemList();
       }
     } catch (error) {
@@ -78,16 +78,16 @@ function Page() {
         testInput,
         expectedOutput,
       };
-      console.log(payload);
+      // console.log(payload);
       const testCase = await addTestcase(payload);
       const res = await testCase.json();
       if (res.ok) {
-        console.log("testcase added succesfully");
+        // console.log("testcase added succesfully");
       } else {
-        console.log(res, "not added testcase");
+        // console.log(res, "not added testcase");
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
 
@@ -102,16 +102,16 @@ function Page() {
       constraints: formState.constraints,
       problemType: formState.problemType,
     };
-    console.log(payload);
+    // console.log(payload);
     try {
       const res = await addProblem(payload);
       if (res.ok) {
-        console.log("problem added successfully", res);
+        // console.log("problem added successfully", res);
       } else {
-        console.log(res.status);
+        // console.log(res.status);
       }
     } catch (err) {
-      console.log(err.message);
+      // console.log(err.message);
     }
   };
   return (
