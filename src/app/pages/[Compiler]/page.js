@@ -69,9 +69,7 @@ function Page({ params }) {
           `${result.msg} input: ${result.yourOutput.input}\n yourOutput: ${result.yourOutput.actualOutput}\n expectedOutput: ${result.yourOutput.expectedOutput} `
         );
       } else {
-        setResultMessage(
-          "Error in submitting code: Unexpected response format"
-        );
+        setResultMessage("Login and signup required");
       }
     } catch (error) {
       setResultMessage("Error in submitting code: " + error.message);
